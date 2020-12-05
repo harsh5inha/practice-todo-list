@@ -11,7 +11,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 // connect to/create (if does not already exist) todolistDB database
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true,useUnifiedTopology: true})
+// Commented out is the local address needed to connect to a local instance of your mongoDB server. In this app we're connecting ot the cloud, so we're using the second address listed below
+// mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true,useUnifiedTopology: true})
+mongoose.connect("mongodb+srv://admin-harsh:test123@cluster0.ldyey.mongodb.net/todolistDB", {useNewUrlParser: true,useUnifiedTopology: true})
 
 // create schema for todo list items
 const itemsSchema = {
@@ -136,7 +138,11 @@ app.post("/delete", function(req,res){
     })}
 })
 
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
-});
+// enable heroku port functionality and local funcitonality if you decide to run your server locally
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port, function() {
+  console.log("Server started successfully.");
+})
