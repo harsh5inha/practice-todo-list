@@ -1,0 +1,31 @@
+<%- include("header") -%>
+
+
+<!-- List the title of the particular todo list at the top of the page after recieving the name from server -->
+<div class="box" id="heading">
+  <h1> <%= listTitle %> </h1>
+</div>
+
+
+
+<div class="box">
+  <!-- After receiving array of data from the server associated with the title above, print the name of each item as a new todo list item -->
+  <% newListItems.forEach(function(ele){ %>
+  <!-- When the checkbox is clicked, send the MongoDB generated _id of the particular item clicked (check_box), and the title of the todo list in question (checkbox_list_name), as a post request to the /delete route -->
+  <form action="/delete" method="post">
+    <div class="item">
+      <input type="checkbox" value="<%= ele._id %>" onChange="this.form.submit()" name="check_box">
+      <p> <%= ele.name %> </p>
+    </div>
+    <input type="hidden" name="checkbox_list_name" value="<%= listTitle %>"></input>
+  </form>
+  <% }) %>
+
+<!-- Allow the creation of new items on the todo list. Send inputted data to server to store in Mongo under the correct associated list title -->
+  <form class="item" action="/" method="post">
+    <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+    <button type="submit" name="list_name" value="<%= listTitle %>">+</button>
+  </form>
+</div>
+
+<%- include("footer") -%>
